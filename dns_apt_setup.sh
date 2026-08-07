@@ -3,7 +3,7 @@ set -euo pipefail
 
 # --- Configuration ---
 NAMESERVER="192.168.128.200"
-APT_SERVER="http://192.168.128.200"
+APT_SERVER="http://192.168.128.50"
 # --- End Configuration ---
 
 replace_nameserver() {
