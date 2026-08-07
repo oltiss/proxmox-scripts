@@ -17,18 +17,18 @@ setup_apt_sources() {
 
     # Setup Debian sources
     cat > /etc/apt/sources.list <<EOF
-deb ${APT_SERVER}/debian ${codename} main contrib
-deb ${APT_SERVER}/debian ${codename}-updates main contrib
+deb [trusted=yes] ${APT_SERVER}/debian ${codename} main contrib
+deb [trusted=yes] ${APT_SERVER}/debian ${codename}-updates main contrib
 
 # security updates
-deb ${APT_SERVER}/debian-security ${codename}-security main contrib
+deb [trusted=yes] ${APT_SERVER}/debian-security ${codename}-security main contrib
 EOF
 
     # Conditionally setup Proxmox sources if this is a PVE host
     if command -v pveversion >/dev/null 2>&1; then
         echo "Proxmox VE detected. Setting up PVE repositories."
         cat > /etc/apt/sources.list.d/pve-local.list <<EOF
-deb ${APT_SERVER}/pve ${codename} pve-no-subscription
+deb [trusted=yes] ${APT_SERVER}/pve ${codename} pve-no-subscription
 EOF
         rm -f /etc/apt/sources.list.d/pve-enterprise.list
     fi
