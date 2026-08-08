@@ -18,10 +18,27 @@ setup_apt_proxy() {
     echo "APT proxy configured to use ${APT_PROXY_URL}"
 }
 
-if [ "$(id -u)" -eq 0 ]; then
-    replace_nameserver > /etc/resolv.conf
-    setup_apt_proxy
-else
-    replace_nameserver | sudo tee /etc/resolv.conf >/dev/null
-    sudo bash -c "$(declare -f setup_apt_proxy); APT_PROXY_URL='${APT_PROXY_URL}'; setup_apt_proxy"
+update_system() {
+    echo "Updating package lists..."
+    apt-get update
+    echo "Upgrading packages..."
+    # -y to automatically say yes to prompts
+    # --no-install-recommends to avoid installing extra packages
+    apt-get upgrade -y --no-install-recommends
+    echo "Cleaning up old packages..."
+    apt-get autoremove -y
+    apt-get clean
+    echo "System update complete."
+}
+
+# --- Main Logic ---
+
+# Ensure the script is run as root, as it modifies system files.
+if [ "$(id -u)" -ne 0 ]; then
+  echo "This script must be run as root. Please use 'sudo'." >&2
+  exit 1
 fi
+
+replace_nameserver > /etc/resolv.conf
+setup_apt_proxy
+update_system
