@@ -4,7 +4,7 @@ set -euo pipefail
 # --- Configuration ---
 NAMESERVER="192.168.128.200"
 # URL for the apt-cacher-ng proxy. Change the IP and port if needed.
-APT_PROXY_URL="http://192.168.128.50:3142"
+APT_PROXY_URL="http://apt-proxy.lan"
 # --- End Configuration ---
 
 replace_nameserver() {
